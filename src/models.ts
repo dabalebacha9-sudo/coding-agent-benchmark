@@ -1,20 +1,39 @@
 import { anthropic } from '@ai-sdk/anthropic'
 import { openai } from '@ai-sdk/openai'
 import { google } from '@ai-sdk/google'
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
 import { MockLanguageModelV4 } from 'ai/test'
 import type { LanguageModel } from 'ai'
+
+const openrouter = createOpenAICompatible({
+  name: 'openrouter',
+  baseURL: 'https://openrouter.ai/api/v1',
+  apiKey: process.env.OPENROUTER_API_KEY,
+})
 
 export type ModelSpec = {
   key: string
   label: string
-  provider: 'anthropic' | 'openai' | 'google' | 'mock'
+  provider: 'anthropic' | 'openai' | 'google' | 'openai-compatible' | 'mock'
   model: () => LanguageModel
   // USD per million tokens, from models.dev (base tier; our tasks stay far under tier cutoffs)
   pricing: { input: number; output: number; cacheRead: number; cacheWrite?: number }
   envKey: string
 }
 
+export type EffortLevel = 'low' | 'medium' | 'high' | 'xhigh' | 'max'
+
+export const EFFORT_LEVELS: EffortLevel[] = ['low', 'medium', 'high', 'xhigh', 'max']
+
 export const MODELS: ModelSpec[] = [
+  {
+    key: 'claude-opus-5',
+    label: 'Claude Opus 5',
+    provider: 'anthropic',
+    model: () => anthropic('claude-opus-5'),
+    pricing: { input: 5, output: 25, cacheRead: 0.5, cacheWrite: 6.25 },
+    envKey: 'ANTHROPIC_API_KEY',
+  },
   {
     key: 'claude-opus-4-8',
     label: 'Claude Opus 4.8',
@@ -86,6 +105,14 @@ export const MODELS: ModelSpec[] = [
     model: () => google('gemini-3.1-pro-preview'),
     pricing: { input: 2, output: 12, cacheRead: 0.2 },
     envKey: 'GOOGLE_GENERATIVE_AI_API_KEY',
+  },
+  {
+    key: 'kimi-k3',
+    label: 'Kimi K3',
+    provider: 'openai-compatible',
+    model: () => openrouter('moonshotai/kimi-k3'),
+    pricing: { input: 3, output: 15, cacheRead: 0.3 },
+    envKey: 'OPENROUTER_API_KEY',
   },
   {
     key: 'mock',

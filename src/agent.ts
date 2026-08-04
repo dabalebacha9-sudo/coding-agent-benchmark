@@ -3,7 +3,7 @@ import { trace } from '@opentelemetry/api'
 import { capture } from '@latitude-data/telemetry'
 import { Sandbox } from './sandbox.ts'
 import { createTools } from './tools.ts'
-import { computeCostUsd, type ModelSpec } from './models.ts'
+import { computeCostUsd, type EffortLevel, type ModelSpec } from './models.ts'
 
 export type Task = {
   id: string
@@ -18,6 +18,7 @@ export type RunResult = {
   task: string
   trial: number
   mode: RunMode
+  effort: EffortLevel | null
   status: 'ok' | 'agent_error'
   traceId: string | null
   solved: boolean
@@ -98,6 +99,7 @@ export async function runOne(
   trial: number,
   runId: string,
   mode: RunMode = 'oracle',
+  effort: EffortLevel | null = null,
 ): Promise<RunResult> {
   const oracle = mode === 'oracle'
   const sandbox = await Sandbox.create(task.dir, { includeTests: oracle })
@@ -112,7 +114,12 @@ export async function runOne(
     task: task.id,
     trial,
     mode,
+    effort,
   }
+
+  // effort is an Anthropic-only provider option; passing it elsewhere would be silently ignored
+  const providerOptions =
+    effort && spec.provider === 'anthropic' ? { anthropic: { effort } } : undefined
 
   try {
     const result = await capture(
@@ -124,6 +131,11 @@ export async function runOne(
           instructions: INSTRUCTIONS[mode],
           prompt: task.prompt,
           tools,
+          ...(providerOptions ? { providerOptions } : {}),
+          // thinking and answer share the output budget, so effort runs need headroom or they
+          // truncate on `length` and look like reasoning failures. Only set on effort runs so the
+          // originally published results stay byte-identical.
+          ...(effort ? { maxOutputTokens: 64000 } : {}),
           stopWhen: stepCountIs(24),
           onStepFinish: (step) => {
             if (firstActionMs === null && step.toolCalls.length > 0) {
@@ -134,7 +146,14 @@ export async function runOne(
       },
       {
         metadata: { ...base, benchmark: 'coding-agent-v1' },
-        tags: [`model:${spec.key}`, `task:${task.id}`, `trial:${trial}`, `mode:${mode}`, 'coding-benchmark'],
+        tags: [
+          `model:${spec.key}`,
+          `task:${task.id}`,
+          `trial:${trial}`,
+          `mode:${mode}`,
+          ...(effort ? [`effort:${effort}`] : []),
+          'coding-benchmark',
+        ],
         sessionId: runId,
         userId: spec.key,
       },

@@ -16,6 +16,7 @@
     "@ai-sdk/anthropic": "latest",
     "@ai-sdk/google": "latest",
     "@ai-sdk/openai": "latest",
+    "@ai-sdk/openai-compatible": "^3.0.14",
     "@ai-sdk/otel": "latest",
     "@latitude-data/telemetry": "latest",
     "@opentelemetry/api": "^1.9.1",

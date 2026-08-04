@@ -5,7 +5,7 @@ import { parseArgs } from 'node:util'
 import { Latitude } from '@latitude-data/telemetry'
 import { registerTelemetry } from 'ai'
 import { OpenTelemetry } from '@ai-sdk/otel'
-import { MODELS, resolveModels } from './models.ts'
+import { EFFORT_LEVELS, MODELS, resolveModels, type EffortLevel } from './models.ts'
 import { runOne, type Task } from './agent.ts'
 
 const ROOT = path.resolve(import.meta.dirname, '..')
@@ -39,9 +39,15 @@ async function main() {
       trials: { type: 'string', default: '3' },
       concurrency: { type: 'string', default: '3' },
       blind: { type: 'boolean', default: false },
+      effort: { type: 'string' },
     },
   })
   const mode = values.blind ? ('blind' as const) : ('oracle' as const)
+
+  const effort = (values.effort ?? null) as EffortLevel | null
+  if (effort && !EFFORT_LEVELS.includes(effort)) {
+    throw new Error(`Unknown effort "${effort}". Available: ${EFFORT_LEVELS.join(', ')}`)
+  }
 
   const specs = resolveModels(values.models.split(',').map((s) => s.trim()))
   const tasks = await loadTasks(values.tasks?.split(',').map((s) => s.trim()))
@@ -65,7 +71,8 @@ async function main() {
   }
 
   console.log(
-    `Running ${queue.length} runs: ${specs.length} models x ${tasks.length} tasks x ${trials} trials (concurrency ${concurrency})`,
+    `Running ${queue.length} runs: ${specs.length} models x ${tasks.length} tasks x ${trials} trials ` +
+      `(mode ${mode}${effort ? `, effort ${effort}` : ''}, concurrency ${concurrency})`,
   )
   await mkdir(path.dirname(RESULTS_FILE), { recursive: true })
 
@@ -76,12 +83,12 @@ async function main() {
       const item = queue[cursor++]
       const spec = specs[item.specIndex]
       const runId = randomUUID()
-      const result = await runOne(spec, item.task, item.trial, runId, mode)
+      const result = await runOne(spec, item.task, item.trial, runId, mode, effort)
       await appendFile(RESULTS_FILE, JSON.stringify(result) + '\n')
       completed++
       const flag = result.status !== 'ok' ? ` ERROR(${result.error})` : result.solved ? ' solved' : ' unsolved'
       console.log(
-        `[${completed}/${queue.length}] ${spec.key} ${item.task.id} t${item.trial}:${flag} ` +
+        `[${completed}/${queue.length}] ${spec.key}${effort ? `/${effort}` : ''} ${item.task.id} t${item.trial}:${flag} ` +
           `${(result.wallMs / 1000).toFixed(1)}s $${result.costUsd.toFixed(4)} ${result.toolCalls} calls`,
       )
     }
