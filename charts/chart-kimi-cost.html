@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>body{margin:0;background:#ffffff;}</style></head>
+<body>
+<svg width="900" height="500" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" font-family="Inter, -apple-system, 'Segoe UI', system-ui, sans-serif">
+  <rect width="900" height="500" fill="#ffffff"/>
+
+  <text x="48" y="52" font-size="26" font-weight="700" fill="#1F2328">Kimi K3 costs like Sonnet but runs six times slower</text>
+  <text x="48" y="82" font-size="15" fill="#57606A">Cost per solved task and median time on the hard tier, 18 runs per model.</text>
+
+  <text x="150" y="124" font-size="12" font-weight="600" fill="#57606A" text-anchor="end">MODEL</text>
+  <text x="164" y="124" font-size="12" font-weight="600" fill="#57606A">COST PER SOLVED TASK</text>
+  <text x="496" y="124" font-size="12" font-weight="600" fill="#57606A">MEDIAN TIME PER TASK</text>
+
+  <!-- model labels -->
+  <g font-size="15" text-anchor="end">
+    <text x="150" y="164" fill="#57606A">GPT-5.6 Luna</text>
+    <text x="150" y="222" fill="#57606A">GPT-5.6 Sol</text>
+    <text x="150" y="280" fill="#57606A">Claude Sonnet 5</text>
+    <text x="150" y="338" fill="#1F2328" font-weight="700">Kimi K3</text>
+    <text x="150" y="396" fill="#57606A">Claude Opus 4.8</text>
+  </g>
+
+  <!-- COST bars (x0=164, usd*1500): Luna 15, Sol 74, Sonnet 75, Kimi 84, Opus 216 -->
+  <g fill="#AEB8C2">
+    <path d="M164 146 h15  a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-15 z"/>
+    <path d="M164 204 h74  a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-74 z"/>
+    <path d="M164 262 h75  a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-75 z"/>
+    <path d="M164 378 h216 a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-216 z"/>
+  </g>
+  <path d="M164 320 h84 a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-84 z" fill="#0080FF"/>
+  <g font-size="15" fill="#1F2328">
+    <text x="187" y="164">$0.010</text>
+    <text x="246" y="222">$0.049</text>
+    <text x="247" y="280">$0.050</text>
+    <text x="256" y="338" font-weight="700" fill="#0080FF">$0.056</text>
+    <text x="388" y="396">$0.144</text>
+  </g>
+
+  <!-- TIME bars (x0=496, s*2.4): Luna 23, Sol 39, Sonnet 37, Kimi 235, Opus 49 -->
+  <g fill="#AEB8C2">
+    <path d="M496 146 h23 a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-23 z"/>
+    <path d="M496 204 h39 a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-39 z"/>
+    <path d="M496 262 h37 a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-37 z"/>
+    <path d="M496 378 h49 a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-49 z"/>
+  </g>
+  <path d="M496 320 h235 a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-235 z" fill="#0080FF"/>
+  <g font-size="15" fill="#1F2328">
+    <text x="527" y="164">9.7s</text>
+    <text x="543" y="222">16.4s</text>
+    <text x="541" y="280">15.3s</text>
+    <text x="739" y="338" font-weight="700" fill="#0080FF">98s</text>
+    <text x="553" y="396">20.4s</text>
+  </g>
+
+  <text x="48" y="474" font-size="12" fill="#8B949E">Latitude per-trace cost, models.dev rates. Every model shown solved all 18 tasks.</text>
+  <text x="852" y="474" font-size="12" fill="#8B949E" text-anchor="end">github.com/latitude-dev/coding-agent-benchmark</text>
+</svg>
+</body>
+</html>

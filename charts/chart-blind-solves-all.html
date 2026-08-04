@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>body{margin:0;background:#ffffff;}</style></head>
+<body>
+<svg width="900" height="506" viewBox="0 0 900 506" xmlns="http://www.w3.org/2000/svg" font-family="Inter, -apple-system, 'Segoe UI', system-ui, sans-serif">
+  <rect width="900" height="506" fill="#ffffff"/>
+
+  <text x="48" y="56" font-size="26" font-weight="700" fill="#1F2328">Blind solves of the event-bus bug</text>
+  <text x="48" y="86" font-size="15" fill="#57606A">Six models, 13 trials each, fixing from the bug report and source alone.</text>
+
+  <!-- rails to 13 (x0=228 -> 520px = 13) -->
+  <g fill="#EDF0F3">
+    <rect x="228" y="132" width="520" height="30" rx="4"/>
+    <rect x="228" y="190" width="520" height="30" rx="4"/>
+    <rect x="228" y="248" width="520" height="30" rx="4"/>
+    <rect x="228" y="306" width="520" height="30" rx="4"/>
+    <rect x="228" y="364" width="520" height="30" rx="4"/>
+    <rect x="228" y="422" width="520" height="30" rx="4"/>
+  </g>
+
+  <!-- model labels -->
+  <g font-size="15" text-anchor="end" fill="#1F2328">
+    <text x="214" y="152">GPT-5.6 Sol</text>
+    <text x="214" y="210">GPT-5.6 Luna</text>
+    <text x="214" y="268">Kimi K3</text>
+    <text x="214" y="326">Claude Sonnet 5</text>
+    <text x="214" y="384">Claude Fable 5</text>
+    <text x="214" y="442">Claude Opus 4.8</text>
+  </g>
+
+  <!-- bars (single hue): Sol 520, Luna 520, Kimi 480, Sonnet 200, Fable 160, Opus 120 -->
+  <g fill="#0080FF">
+    <path d="M228 132 h516 a4 4 0 0 1 4 4 v22 a4 4 0 0 1 -4 4 h-516 z"/>
+    <path d="M228 190 h516 a4 4 0 0 1 4 4 v22 a4 4 0 0 1 -4 4 h-516 z"/>
+    <path d="M228 248 h476 a4 4 0 0 1 4 4 v22 a4 4 0 0 1 -4 4 h-476 z"/>
+    <path d="M228 306 h196 a4 4 0 0 1 4 4 v22 a4 4 0 0 1 -4 4 h-196 z"/>
+    <path d="M228 364 h156 a4 4 0 0 1 4 4 v22 a4 4 0 0 1 -4 4 h-156 z"/>
+    <path d="M228 422 h116 a4 4 0 0 1 4 4 v22 a4 4 0 0 1 -4 4 h-116 z"/>
+  </g>
+
+  <!-- value labels, aligned column -->
+  <g font-size="15" fill="#1F2328">
+    <text x="760" y="152">13/13</text>
+    <text x="760" y="210">13/13</text>
+    <text x="760" y="268">12/13</text>
+    <text x="760" y="326">5/13</text>
+    <text x="760" y="384">4/13</text>
+    <text x="760" y="442">3/13</text>
+  </g>
+
+  <!-- footer -->
+  <text x="48" y="488" font-size="12" fill="#8B949E">A hidden test suite the model never sees scores the fix afterward.</text>
+  <text x="852" y="488" font-size="12" fill="#8B949E" text-anchor="end">github.com/latitude-dev/coding-agent-benchmark</text>
+</svg>
+</body>
+</html>
