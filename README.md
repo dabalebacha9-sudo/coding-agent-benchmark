@@ -4,6 +4,9 @@ This repo benchmarks frontier LLMs as coding agents on the metrics that matter i
 
 ## How it works
 
+
+
+   
 Each task in `tasks/` is a tiny JavaScript project with one planted bug. The shipped test suite fails because of the bug and passes once it is fixed. The harness gives each model the same agent loop and four tools (`list_files`, `read_file`, `write_file`, `run_tests`), points it at a sandboxed copy of the task, and lets it work for up to 24 steps.
 
 A run counts as solved only if the full test suite passes against pristine test files. If a model edits a test to make it pass, the original tests are restored before scoring and the run is flagged as tampered.
